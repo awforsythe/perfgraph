@@ -17,4 +17,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 
+app.use((err, req, res, next) => {
+  if (!err.message || !err.code || err.code >= 500) {
+    next(err);
+  } else {
+    res.status(err.code).send({ error: err.message });
+  }
+});
+
 module.exports = app;

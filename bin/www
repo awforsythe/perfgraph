@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const db = require('../db');
 const app = require('../app');
 const debug = require('debug')('perfgraph:server');
 const http = require('http');
@@ -30,16 +31,21 @@ function onError(error) {
   }
 }
 
-function onListening() {
-  const addr = server.address();
+function onListening(addr) {
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
 
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+db.init()
+.then(() => {
+  const port = normalizePort(process.env.PORT || '3000');
+  app.set('port', port);
 
-const server = http.createServer(app);
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+  const server = http.createServer(app);
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', () => onListening(server.address()));
+})
+.catch((err) => {
+  console.log(`Database initialization failed: ${err}`);
+});
