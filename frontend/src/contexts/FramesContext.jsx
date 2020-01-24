@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { SocketEventContext } from './SocketEventContext.jsx';
 import { expectJson } from '../util.jsx';
 
 const FramesContext = React.createContext();
 
-class FramesProvider extends React.Component {
+class _FramesProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,11 +14,10 @@ class FramesProvider extends React.Component {
       error: null,
       frames: [],
     };
-    this.socket = null;
   }
 
-  handleEvent = (event, params) => {
-    if (event === 'frame_created') {
+  handleSocketEvent = (type, params) => {
+    if (type === 'frame_created') {
       if (params.sessionId === this.props.sessionId) {
         this.fetchSingleFrame(params.id);
       }
@@ -26,15 +26,11 @@ class FramesProvider extends React.Component {
 
   componentDidMount() {
     this.fetchFrames();
-    this.socket = new WebSocket(`ws://${window.location.host}/ws`);
-    this.socket.onmessage = (sockevent) => {
-      const { event, params } = JSON.parse(sockevent.data);
-      this.handleEvent(event, params);
-    }
+    this.props.socketEvents.register(this.handleSocketEvent);
   }
 
   componentWillUnmount() {
-    this.socket.close(1000);
+    this.props.socketEvents.unregister(this.handleSocketEvent);
   }
 
   fetchFrames() {
@@ -72,8 +68,20 @@ class FramesProvider extends React.Component {
     );
   }
 };
-FramesProvider.propTypes = {
+_FramesProvider.propTypes = {
+  socketEvents: PropTypes.object.isRequired,
   sessionId: PropTypes.number.isRequired,
 };
+const FramesProvider = (props) => (
+  <SocketEventContext.Consumer>
+    {socketEvents => (
+      <_FramesProvider
+        socketEvents={socketEvents}
+        {...props}
+      />
+    )}
+  </SocketEventContext.Consumer>
+);
+
 
 export { FramesContext, FramesProvider };

@@ -1,7 +1,7 @@
 let sockets = [];
 
-function emit(event, params) {
-  const data = JSON.stringify({ event, params });
+function emit(type, params) {
+  const data = JSON.stringify({ type, params });
   for (const socket of sockets) {
     socket.send(data);
   }

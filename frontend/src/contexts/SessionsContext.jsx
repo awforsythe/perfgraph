@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
+import { SocketEventContext } from './SocketEventContext.jsx';
 import { expectJson } from '../util.jsx';
 
 const SessionsContext = React.createContext();
 
-class SessionsProvider extends React.Component {
+class _SessionsProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,28 +14,23 @@ class SessionsProvider extends React.Component {
       error: null,
       sessions: [],
     };
-    this.socket = null;
   }
 
-  handleEvent = (event, params) => {
-    if (event === 'session_created' || event === 'session_updated') {
+  handleSocketEvent = (type, params) => {
+    if (type === 'session_created' || type === 'session_updated') {
       this.refreshSession(params.id);
-    } else if (event === 'session_deleted') {
+    } else if (type === 'session_deleted') {
       this.removeSession(params.id);
     }
   };
 
   componentDidMount() {
     this.fetchSessions();
-    this.socket = new WebSocket(`ws://${window.location.host}/ws`);
-    this.socket.onmessage = (sockevent) => {
-      const { event, params } = JSON.parse(sockevent.data);
-      this.handleEvent(event, params);
-    }
+    this.props.socketEvents.register(this.handleSocketEvent);
   }
 
   componentWillUnmount() {
-    this.socket.close(1000);
+    this.props.socketEvents.unregister(this.handleSocketEvent);
   }
 
   fetchSessions() {
@@ -81,5 +78,18 @@ class SessionsProvider extends React.Component {
     );
   }
 };
+_SessionsProvider.propTypes = {
+  socketEvents: PropTypes.object.isRequired,
+};
+const SessionsProvider = (props) => (
+  <SocketEventContext.Consumer>
+    {socketEvents => (
+      <_SessionsProvider
+        socketEvents={socketEvents}
+        {...props}
+      />
+    )}
+  </SocketEventContext.Consumer>
+);
 
 export { SessionsContext, SessionsProvider };
