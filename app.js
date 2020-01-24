@@ -9,7 +9,6 @@ const logger = require('morgan');
 
 const ws = require('./routes/ws');
 const api = require('./routes/api');
-const index = require('./routes/index');
 
 app.use(logger('dev'));
 app.use(express.json());
