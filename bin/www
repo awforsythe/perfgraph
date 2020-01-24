@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 const db = require('../db');
-const app = require('../app');
+const { app, server } = require('../app');
 const debug = require('debug')('perfgraph:server');
-const http = require('http');
 
 function normalizePort(val) {
   const port = parseInt(val, 10);
@@ -40,8 +39,6 @@ db.init()
 .then(() => {
   const port = normalizePort(process.env.PORT || '4300');
   app.set('port', port);
-
-  const server = http.createServer(app);
   server.listen(port);
   server.on('error', onError);
   server.on('listening', () => onListening(server.address()));

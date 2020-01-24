@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const db = require('../db');
+const socket = require('../socket');
 
 async function listSessions(req, res, next) {
   const sessions = await db.session.list();
@@ -8,6 +9,7 @@ async function listSessions(req, res, next) {
 
 async function createSession(req, res, next) {
   const session = await db.session.new(req.body.description);
+  socket.session.created(session);
   res.status(201).send(session);
 }
 
@@ -37,6 +39,7 @@ async function updateSession(req, res, next) {
   if (!updated) {
     return next({ code: 404, message: `Session ${id} not found`});
   }
+  socket.session.updated({ id });
   res.status(204).send();
 }
 
@@ -73,6 +76,8 @@ async function createFrame(req, res, next) {
   if (!result.success) {
     return next({ code: 400, message: result.error });
   }
+  socket.frame.created({ sessionId, id: result.id });
+  socket.session.updated({ id: sessionId });
   res.status(201).send({ id: result.id });
 }
 
@@ -85,6 +90,7 @@ async function deleteSession(req, res, next) {
   if (!deleted) {
     return next({ code: 404, message: `Session ${id} not found` });
   }
+  socket.session.deleted({ id });
   res.status(204).send();
 }
 
