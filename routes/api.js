@@ -81,6 +81,18 @@ async function createFrame(req, res, next) {
   res.status(201).send({ id: result.id });
 }
 
+async function getFrame(req, res, nexz) {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return next({ code: 400, message: "URL parameter 'id' must be an integer" });
+  }
+  const frame = await db.frame.get(id);
+  if (!frame) {
+    return next({ code: 404, message: `Frame ${id} not found`});
+  }
+  res.send(frame);
+}
+
 async function deleteSession(req, res, next) {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
@@ -101,5 +113,6 @@ router.post('/session/:id', updateSession);
 router.get('/session/:id/frame', listFrames);
 router.post('/session/:id/frame', createFrame);
 router.delete('/session/:id', deleteSession);
+router.get('/frame/:id', getFrame)
 
 module.exports = router;

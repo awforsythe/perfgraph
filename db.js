@@ -115,6 +115,9 @@ module.exports = {
         return { error: message };
       }
     },
+    get: async (id) => {
+      return await db.get('SELECT * FROM frame WHERE id = ?', id);
+    },
     list: async (sessionId) => {
       return await db.all('SELECT * FROM frame WHERE session_id=? ORDER BY number', sessionId);
     },
