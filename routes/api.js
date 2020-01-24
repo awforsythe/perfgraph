@@ -7,7 +7,7 @@ async function listSessions(req, res, next) {
 }
 
 async function createSession(req, res, next) {
-  const session = await db.session.new();
+  const session = await db.session.new(req.body.description);
   res.status(201).send(session);
 }
 
