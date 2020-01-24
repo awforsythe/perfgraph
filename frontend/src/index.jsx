@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { SessionsProvider } from './contexts/SessionsContext.jsx';
+import SessionsList from './components/SessionsList.jsx';
+
 const App = () => (
-  <h1>Hello</h1>
+  <SessionsProvider>
+    <SessionsList />
+  </SessionsProvider>
 );
 
 ReactDOM.render(<App />, document.querySelector('#main'));
