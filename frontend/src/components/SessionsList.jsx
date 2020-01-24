@@ -14,20 +14,14 @@ function SessionsList(props) {
     return <ErrorIndicator message={context.error} />;
   }
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid black' }}>
-        <div>&nbsp;</div>
-        <div>FRAME</div>
-        <div>GAME</div>
-        <div>RENDER</div>
-        <div>GPU</div>
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       {context.sessions.map(session => (
         <SessionsListItem
           key={session.id}
           id={session.id}
           createdAt={session.created_at}
           description={session.description}
+          notes={session.notes}
           frameTime={session.mean_frame_time}
           gameThreadTime={session.mean_game_thread_time}
           renderThreadTime={session.mean_render_thread_time}
