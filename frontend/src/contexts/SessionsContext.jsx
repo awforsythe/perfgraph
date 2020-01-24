@@ -33,7 +33,7 @@ class SessionsProvider extends React.Component {
   }
 
   componentWillUnmount() {
-    this.socket.close(1001);
+    this.socket.close(1000);
   }
 
   fetchSessions() {
