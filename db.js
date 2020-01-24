@@ -13,7 +13,11 @@ module.exports = {
         id INTEGER PRIMARY KEY,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         description TEXT,
-        notes TEXT
+        notes TEXT,
+        mean_frame_time REAL DEFAULT 0.0,
+        mean_game_thread_time REAL DEFAULT 0.0,
+        mean_render_thread_time REAL DEFAULT 0.0,
+        mean_gpu_frame_time REAL DEFAULT 0.0
       )
     `);
     await db.run(`
@@ -33,6 +37,27 @@ module.exports = {
         FOREIGN KEY(session_id) REFERENCES session(id) ON DELETE CASCADE,
         UNIQUE(session_id, number)
       )
+    `);
+    await db.run(`
+      CREATE TRIGGER IF NOT EXISTS recompute_session_mean_stats
+        AFTER INSERT ON frame
+      BEGIN
+        UPDATE session SET (
+          mean_frame_time,
+          mean_game_thread_time,
+          mean_render_thread_time,
+          mean_gpu_frame_time
+        ) = (
+          SELECT
+            AVG(frame_time) as mean_frame_time,
+            AVG(game_thread_time) as mean_game_thread_time,
+            AVG(render_thread_time) as mean_render_thread_time,
+            AVG(gpu_frame_time) as mean_gpu_frame_time
+          FROM frame
+          WHERE session_id = NEW.session_id
+        )
+        WHERE id = NEW.session_id;
+      END;
     `);
   },
   session: {
