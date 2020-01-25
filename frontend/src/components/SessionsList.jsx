@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 
 import { SessionsContext } from '../contexts/SessionsContext.jsx';
 import LoadingIndicator from './LoadingIndicator.jsx';
@@ -7,6 +8,7 @@ import SessionsListItem from './SessionsListItem.jsx';
 
 function SessionsList(props) {
   const context = useContext(SessionsContext);
+  const { baselineSessionId, onSetBaselineSessionId } = props;
   if (context.isLoading) {
     return <LoadingIndicator text="Loading sessions..." />;
   }
@@ -26,10 +28,16 @@ function SessionsList(props) {
           gameThreadTime={session.mean_game_thread_time}
           renderThreadTime={session.mean_render_thread_time}
           gpuFrameTime={session.mean_gpu_frame_time}
+          isBaseline={baselineSessionId === session.id}
+          onSetBaselineSessionId={onSetBaselineSessionId}
         />
       ))}
     </div>
   )
 }
+SessionsList.propTypes = {
+  baselineSessionId: PropTypes.number,
+  onSetBaselineSessionId: PropTypes.func.isRequired,
+};
 
 export default SessionsList;

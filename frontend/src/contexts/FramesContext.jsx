@@ -34,11 +34,13 @@ class _FramesProvider extends React.Component {
   }
 
   fetchFrames() {
-    this.setState({ isLoading: true });
-    fetch(`/api/session/${this.props.sessionId}/frame`)
-      .then(expectJson)
-      .then(data => this.setState({ isLoading: false, error: null, frames: data.frames }))
-      .catch(error => this.setState({ isLoading: false, error }));
+    if (this.props.sessionId) {
+      this.setState({ isLoading: true });
+      fetch(`/api/session/${this.props.sessionId}/frame`)
+        .then(expectJson)
+        .then(data => this.setState({ isLoading: false, error: null, frames: data.frames }))
+        .catch(error => this.setState({ isLoading: false, error }));
+    }
   }
 
   fetchSingleFrame(id) {
@@ -70,7 +72,7 @@ class _FramesProvider extends React.Component {
 };
 _FramesProvider.propTypes = {
   socketEvents: PropTypes.object.isRequired,
-  sessionId: PropTypes.number.isRequired,
+  sessionId: PropTypes.number,
 };
 const FramesProvider = (props) => (
   <SocketEventContext.Consumer>
