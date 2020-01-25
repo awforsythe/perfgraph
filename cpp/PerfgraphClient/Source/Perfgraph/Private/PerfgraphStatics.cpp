@@ -72,7 +72,7 @@ void UPerfgraphStatics::BeginPerfgraphCapture(UObject* WorldContextObject, FLate
 			if (APlayerController* Controller = World->GetFirstPlayerController())
 			{
 				Controller->ConsoleCommand(TEXT("stat none"), false);
-				Controller->ConsoleCommand(TEXT("stat unit"), false);
+				Controller->ConsoleCommand(TEXT("stat raw"), false);
 				Controller->ConsoleCommand(TEXT("stat rhi -nodisplay"), false);
 				Controller->ConsoleCommand(TEXT("stat scenerendering -nodisplay"), false);
 			}
@@ -92,10 +92,35 @@ void UPerfgraphStatics::CapturePerfgraphFrame(UObject* WorldContextObject, int32
 		FStatUnitData* StatUnitData = LocalPlayer->ViewportClient->GetStatUnitData();
 		if (StatUnitData)
 		{
+#if !UE_BUILD_SHIPPING
+			const int32 SampleCount = 60;
+			static_assert(SampleCount > 0, "stat unit sample count must be positive");
+			static_assert(SampleCount <= FStatUnitData::NumberOfSamples, "stat unit sample count must not exceed FStatUnitData::NumberOfSamples");
+
+			float FrameTimeSum = 0.0f;
+			float GameThreadTimeSum = 0.0f;
+			float RenderThreadTimeSum = 0.0f;
+			float GPUFrameTimeSum = 0.0f;
+			for (int32 LogicalIndex = StatUnitData->CurrentIndex - SampleCount; LogicalIndex < StatUnitData->CurrentIndex; LogicalIndex++)
+			{
+				const int32 ActualIndex = LogicalIndex < 0 ? (LogicalIndex + SampleCount) : LogicalIndex;
+				FrameTimeSum += StatUnitData->FrameTimes[ActualIndex];
+				GameThreadTimeSum += StatUnitData->GameThreadTimes[ActualIndex];
+				RenderThreadTimeSum += StatUnitData->RenderThreadTimes[ActualIndex];
+				GPUFrameTimeSum += StatUnitData->GPUFrameTimes[ActualIndex];
+
+			}
+
+			Stats.FrameTime = FrameTimeSum / SampleCount;
+			Stats.GameThreadTime = GameThreadTimeSum / SampleCount;
+			Stats.RenderThreadTime = RenderThreadTimeSum / SampleCount;
+			Stats.GPUFrameTime = GPUFrameTimeSum / SampleCount;
+#else
 			Stats.FrameTime = StatUnitData->FrameTime;
 			Stats.GameThreadTime = StatUnitData->GameThreadTime;
 			Stats.RenderThreadTime = StatUnitData->RenderThreadTime;
 			Stats.GPUFrameTime = StatUnitData->GPUFrameTime;
+#endif
 		}
 	}
 
