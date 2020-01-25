@@ -1,0 +1,243 @@
+body {
+  color: #8e9297;
+  background-color: #36393f;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9em;
+}
+
+svg {
+  fill: #8e9297;
+  font-size: 4em;
+}
+
+a.button {
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  border: 1px solid #000;
+  border-radius: 0.3em;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: #8e9297;
+  font-size: 0.9em;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  transition: all 0.1s;
+  background-color: #2f3136;
+}
+
+a.button:hover {
+  background-color: #34373c;
+  color: #c6c8cb;
+}
+
+a.button:active {
+  background-color: #393c43;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-content {
+  visibility: hidden;
+  background-color: #18191c;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 5px;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  min-width: 140px;
+  margin-left: -70px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.tooltip .tooltip-content::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: transparent transparent #18191c transparent;
+}
+
+.tooltip:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+}
+
+.card {
+  border-radius: 4px;
+  background-color: #202225;
+  box-shadow: 1px 1px 0px 0 #1b1d20;
+}
+
+.secondary {
+  background-color: #2f3136;
+}
+
+.session {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5em;
+}
+
+.session-header {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  padding: 0.3em;
+}
+
+.session-baseline-button, .session-delete-button {
+  display: flex;
+  background-color: #34373c;
+  border: 1px solid #393c43;
+  border-radius: 4px;
+  box-shadow: 1px 1px 0px 0 #1b1d20;
+}
+
+.session-baseline-button:hover, .session-delete-button:hover {
+  background-color: #393c43;
+}
+
+.session-baseline-button:active, .session-delete-button:active {
+  background-color: #2f3136;
+}
+
+.session-baseline-button svg, .session-delete-button svg {
+  width: 20px;
+  height: 20x;
+}
+
+.session-delete-button:hover {
+  background-color: #5b3d40;
+  border-color: #8f3f3c;
+}
+
+.session-delete-button:hover svg {
+  fill: #e44235;
+}
+
+.session-label {
+  width: 15em;
+  font-weight: 500;
+  margin-left: 0.5em;
+}
+
+.session-label-id {
+  color: #8e9297;
+  font-weight: 300;
+}
+
+.session-time-readout {
+  width: 7em;
+  background-color: #2b2e32;
+  border: 1px solid #34373c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 0px 0 #1b1d20;
+  margin: 0 3px;
+}
+
+.session-frames {
+  display: flex;
+  padding: 0.25em;
+  flex-wrap: wrap;
+}
+
+.frame {
+  margin: 0.2em;
+  padding: 0.5em;
+  min-width: 90px;
+}
+
+.frame-title {
+  font-size: 0.8em;
+  border-bottom: 1px solid #1b1d20;
+  margin-bottom: 0.2em;
+}
+
+.readout.small {
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
+.readout-value {
+  color: #c6c8cb;
+  font-weight: 500;
+  width: 2.75em;
+  text-align: right;
+  padding-top: 0.15em;
+}
+
+.readout-value.small {
+  font-size: 0.9em;
+  font-weight: 400;
+  width: 3em;
+  padding-top: 0.15em;
+}
+
+.readout-delta {
+  flex-grow: 1;
+  text-align: right;
+  font-size: 0.8em;
+  font-weight: 500;
+  padding-top: 0.45em;
+  margin-right: 0.5em;
+}
+
+.readout-delta.small {
+  font-size: 0.7em;
+  font-weight: 500;
+  padding-top: 0.4em;
+}
+
+.count {
+  display: flex;
+}
+
+.count-value {
+  width: 2.75em;
+  margin-right: 0.2em;
+  color: #c6c8cb;
+  text-align: right;
+}
+
+.count-label {
+  flex-grow: 1;
+  font-size: 0.8em;
+  padding-top: 0.15em;
+  text-align: left;
+}
+
+.count-delta {
+  width: 2.75em;
+  text-align: right;
+  font-size: 0.9em;
+}
+
+.red {
+  color: #e44235;
+}
+
+.yellow {
+  color: #ffa24f;
+}
+
+.blue {
+  color: #8a93a2;
+}
+
+.green {
+  color: #43b581;
+}
+
+.is-baseline {
+  background-color: #393c43;
+}

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+import '@csstools/normalize.css';
+import 'typeface-roboto';
+import './style.css';
+
 import { SocketEventProvider } from './contexts/SocketEventContext.jsx';
 import { SessionsProvider } from './contexts/SessionsContext.jsx';
 import { BaselineProvider } from './contexts/BaselineContext.jsx';
@@ -32,6 +36,7 @@ class App extends React.Component {
       <SocketEventProvider>
         <SessionsProvider>
           <BaselineProvider baselineSessionId={baselineSessionId}>
+            <h1>perfgraph</h1>
             <SessionsList
               baselineSessionId={baselineSessionId}
               onSetBaselineSessionId={this.handleSetBaselineSessionId}

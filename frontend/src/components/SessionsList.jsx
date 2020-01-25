@@ -16,7 +16,7 @@ function SessionsList(props) {
     return <ErrorIndicator message={context.error} />;
   }
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div className="sessions-list">
       {context.sessions.map(session => (
         <SessionsListItem
           key={session.id}

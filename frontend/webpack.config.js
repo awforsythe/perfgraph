@@ -21,13 +21,13 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svf)$/,
+        test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svf|svg)$/,
         use: [
           {
             loader: 'url-loader',
             options: {
               limit: 8192,
-              publicPath: url => `../public/${url}`,
+              publicPath: url => `../${url}`,
             },
           },
         ],

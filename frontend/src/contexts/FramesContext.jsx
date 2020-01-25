@@ -33,6 +33,12 @@ class _FramesProvider extends React.Component {
     this.props.socketEvents.unregister(this.handleSocketEvent);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.sessionId !== prevProps.sessionId) {
+      this.fetchFrames();
+    }
+  }
+
   fetchFrames() {
     if (this.props.sessionId) {
       this.setState({ isLoading: true });

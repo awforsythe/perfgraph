@@ -7,6 +7,7 @@ import ErrorIndicator from './ErrorIndicator.jsx';
 import FramesListItem from './FramesListItem.jsx';
 
 function FramesList(props) {
+  const { isBaseline } = props;
   const context = useContext(FramesContext);
   const inner = context.isLoading ? (
     <LoadingIndicator text="Loading frames..." />
@@ -17,6 +18,7 @@ function FramesList(props) {
       <FramesListItem
         key={frame.id}
         id={frame.id}
+        isBaseline={isBaseline}
         number={frame.number}
         description={frame.description}
         frameTime={frame.frame_time}
@@ -31,13 +33,13 @@ function FramesList(props) {
     ))
   ));
   return (
-    <div style={{ display: 'flex', paddingLeft: 20, margin: 5 }}>
+    <React.Fragment>
       {inner}
-    </div>
+    </React.Fragment>
   );
 }
 FramesList.propTypes = {
-  sessionId: PropTypes.number.isRequired,
+  isBaseline: PropTypes.bool.isRequired,
 };
 
 export default FramesList;
