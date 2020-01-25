@@ -6,20 +6,41 @@ import { SessionsProvider } from './contexts/SessionsContext.jsx';
 import { BaselineProvider } from './contexts/BaselineContext.jsx';
 import SessionsList from './components/SessionsList.jsx';
 
-const App = () => {
-  const [baselineSessionId, setBaselineSessionId] = useState(null);
-  return (
-    <SocketEventProvider>
-      <SessionsProvider>
-        <BaselineProvider baselineSessionId={baselineSessionId}>
-          <SessionsList
-            baselineSessionId={baselineSessionId}
-            onSetBaselineSessionId={setBaselineSessionId}
-          />
-        </BaselineProvider>
-      </SessionsProvider>
-    </SocketEventProvider>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      baselineSessionId: null,
+    };
+  }
+
+  componentDidMount() {
+    const baselineSessionId = parseInt(window.localStorage.getItem('perfgraphBaselineSessionId'));
+    if (!isNaN(baselineSessionId) && baselineSessionId > 0) {
+      this.setState({ baselineSessionId });
+    }
+  }
+
+  handleSetBaselineSessionId = (baselineSessionId) => {
+    window.localStorage.setItem('perfgraphBaselineSessionId', baselineSessionId);
+    this.setState({ baselineSessionId });
+  };
+
+  render() {
+    const { baselineSessionId } = this.state;
+    return (
+      <SocketEventProvider>
+        <SessionsProvider>
+          <BaselineProvider baselineSessionId={baselineSessionId}>
+            <SessionsList
+              baselineSessionId={baselineSessionId}
+              onSetBaselineSessionId={this.handleSetBaselineSessionId}
+            />
+          </BaselineProvider>
+        </SessionsProvider>
+      </SocketEventProvider>
+    );
+  }
 }
 
 ReactDOM.render(<App />, document.querySelector('#main'));
