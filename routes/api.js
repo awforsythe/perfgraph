@@ -81,7 +81,7 @@ async function createFrame(req, res, next) {
   res.status(201).send({ id: result.id });
 }
 
-async function getFrame(req, res, nexz) {
+async function getFrame(req, res, next) {
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     return next({ code: 400, message: "URL parameter 'id' must be an integer" });
