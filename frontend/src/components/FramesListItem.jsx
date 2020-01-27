@@ -1,17 +1,80 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import Tippy from '@tippy.js/react';
+
 import { BaselineContext } from '../contexts/BaselineContext.jsx';
 
 import TimeReadout from './TimeReadout.jsx';
 import CountReadout from './CountReadout.jsx';
+
+function FrameTooltip(props) {
+  const { gpuMemory, numTrianglesDrawn, numDrawCalls, numMeshDrawCalls, baselineFrame } = props;
+  return (
+    <div className="frame-tooltip-content">
+      <CountReadout
+        label="mb gpu"
+        value={gpuMemory}
+        baselineValue={baselineFrame && baselineFrame.gpu_memory}
+        greenThreshold={-20}
+        blueThreshold={10}
+        yellowThreshold={30}
+      />
+      <CountReadout thousands
+        label="triangles"
+        value={numTrianglesDrawn}
+        baselineValue={baselineFrame && baselineFrame.num_triangles_drawn}
+        greenThreshold={-3000}
+        blueThreshold={1000}
+        yellowThreshold={5000}
+      />
+      <CountReadout
+        label="draw calls"
+        value={numDrawCalls}
+        baselineValue={baselineFrame && baselineFrame.num_draw_calls}
+        greenThreshold={-15}
+        blueThreshold={5}
+        yellowThreshold={10}
+      />
+      <CountReadout
+        label="mesh calls"
+        value={numMeshDrawCalls}
+        baselineValue={baselineFrame && baselineFrame.num_mesh_draw_calls}
+        greenThreshold={-8}
+        blueThreshold={2}
+        yellowThreshold={6}
+      />
+    </div>
+  );
+}
+FrameTooltip.propTypes = {
+  gpuMemory: PropTypes.number.isRequired,
+  numTrianglesDrawn: PropTypes.number.isRequired,
+  numDrawCalls: PropTypes.number.isRequired,
+  numMeshDrawCalls: PropTypes.number.isRequired,
+  baselineFrame: PropTypes.object,
+};
 
 function FramesListItem(props) {
   const { id, isBaseline, number, description, frameTime, gameThreadTime, renderThreadTime, gpuFrameTime, gpuMemory, numTrianglesDrawn, numDrawCalls, numMeshDrawCalls } = props;
   const baseline = useContext(BaselineContext);
   const baselineFrame = (!isBaseline && baseline.hasBaseline) ? baseline.frames.find(x => x.number === number) : null;
   return (
-    <div className="tooltip">
+    <Tippy
+      content={(
+        <FrameTooltip
+          gpuMemory={gpuMemory}
+          numTrianglesDrawn={numTrianglesDrawn}
+          numDrawCalls={numDrawCalls}
+          numMeshDrawCalls={numMeshDrawCalls}
+          baselineFrame={baselineFrame}
+        />
+      )}
+      arrow={false}
+      duration={[100, 100]}
+      distance={2}
+      placement="bottom"
+    >
       <div className={`frame card secondary${isBaseline ? ' is-baseline' : ''}`}>
         <div className="frame-title">{description || number}</div>
         <TimeReadout small
@@ -35,41 +98,7 @@ function FramesListItem(props) {
           baselineValue={baselineFrame && baselineFrame.gpu_frame_time}
         />
       </div>
-      <div className="tooltip-content">
-        <CountReadout
-          label="mb gpu"
-          value={gpuMemory}
-          baselineValue={baselineFrame && baselineFrame.gpu_memory}
-          greenThreshold={-20}
-          blueThreshold={10}
-          yellowThreshold={30}
-        />
-        <CountReadout thousands
-          label="triangles"
-          value={numTrianglesDrawn}
-          baselineValue={baselineFrame && baselineFrame.num_triangles_drawn}
-          greenThreshold={-3000}
-          blueThreshold={1000}
-          yellowThreshold={5000}
-        />
-        <CountReadout
-          label="draw calls"
-          value={numDrawCalls}
-          baselineValue={baselineFrame && baselineFrame.num_draw_calls}
-          greenThreshold={-15}
-          blueThreshold={5}
-          yellowThreshold={10}
-        />
-        <CountReadout
-          label="mesh calls"
-          value={numMeshDrawCalls}
-          baselineValue={baselineFrame && baselineFrame.num_mesh_draw_calls}
-          greenThreshold={-8}
-          blueThreshold={2}
-          yellowThreshold={6}
-        />
-      </div>
-    </div>
+    </Tippy>
   );
 }
 FramesListItem.propTypes = {

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import '@csstools/normalize.css';
 import 'typeface-roboto';
+import 'tippy.js/dist/tippy.css';
 import './style.css';
 
 import { SocketEventProvider } from './contexts/SocketEventContext.jsx';

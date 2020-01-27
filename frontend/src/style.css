@@ -9,41 +9,24 @@ svg {
   fill: #8e9297;
 }
 
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltip-content {
-  visibility: hidden;
-  background-color: #18191c;
+.tippy-tooltip {
   text-align: center;
+  font-weight: 500;
+  border: 2px solid #36393f;
   border-radius: 4px;
-  padding: 5px 5px;
-  position: absolute;
-  z-index: 1;
-  top: 100%;
-  left: 50%;
-  min-width: 140px;
-  margin-left: -70px;
-  opacity: 0;
-  transition: opacity 0.1s;
+  background-color: #393c43;
+  box-shadow: 1px 1px 0px 0 #1b1d20;
 }
 
-.tooltip .tooltip-content::after {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -4px;
-  border-width: 4px;
-  border-style: solid;
-  border-color: transparent transparent #18191c transparent;
+.tippy-content {
+  font-weight: 400;
+  font-size: 0.9em;
+  padding: 2px 6px;
 }
 
-.tooltip:hover .tooltip-content {
-  visibility: visible;
-  opacity: 1;
+.frame-tooltip-content {
+  font-size: 1.1em;
+  font-weight: 450;
 }
 
 .card {
@@ -148,7 +131,7 @@ svg {
   padding: 0.3em;
 }
 
-.session-delete-button:hover {
+.session-delete-button:hover, .delete-tooltip {
   background-color: #5b3d40;
   border-color: #8f3f3c;
 }
@@ -237,12 +220,13 @@ svg {
 .count-value {
   width: 2.75em;
   margin-right: 0.2em;
-  color: #c6c8cb;
   text-align: right;
+  color: #ffffff;
 }
 
 .count-label {
   flex-grow: 1;
+  color: #c6c8cb;
   font-size: 0.8em;
   padding-top: 0.15em;
   text-align: left;
