@@ -31,8 +31,11 @@ function onError(error) {
 }
 
 function onListening(addr) {
-  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  if (typeof addr === 'string') {
+    console.log(`Listening on port${addr}`);
+  } else {
+    console.log(`Running at http://localhost:${addr.port}`);
+  }
 }
 
 db.init()
