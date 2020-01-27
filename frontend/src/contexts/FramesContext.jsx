@@ -46,6 +46,8 @@ class _FramesProvider extends React.Component {
         .then(expectJson)
         .then(data => this.setState({ isLoading: false, error: null, frames: data.frames }))
         .catch(error => this.setState({ isLoading: false, error }));
+    } else {
+      this.setState({ isLoading: false, error: null, frames: [] });
     }
   }
 

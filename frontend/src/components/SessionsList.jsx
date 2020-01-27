@@ -8,7 +8,7 @@ import SessionsListItem from './SessionsListItem.jsx';
 
 function SessionsList(props) {
   const context = useContext(SessionsContext);
-  const { baselineSessionId, onSetBaselineSessionId } = props;
+  const { baselineSessionId, chartSessionId, onBaselineSessionIdChange, onChartSessionIdChange } = props;
   if (context.isLoading) {
     return <LoadingIndicator text="Loading sessions..." />;
   }
@@ -29,7 +29,9 @@ function SessionsList(props) {
           renderThreadTime={session.mean_render_thread_time}
           gpuFrameTime={session.mean_gpu_frame_time}
           isBaseline={baselineSessionId === session.id}
-          onSetBaselineSessionId={onSetBaselineSessionId}
+          isCharted={chartSessionId === session.id}
+          onBaselineSessionIdChange={onBaselineSessionIdChange}
+          onChartSessionIdChange={onChartSessionIdChange}
         />
       ))}
     </div>
@@ -37,7 +39,9 @@ function SessionsList(props) {
 }
 SessionsList.propTypes = {
   baselineSessionId: PropTypes.number,
-  onSetBaselineSessionId: PropTypes.func.isRequired,
+  chartSessionId: PropTypes.number,
+  onBaselineSessionIdChange: PropTypes.func.isRequired,
+  onChartSessionIdChange: PropTypes.func.isRequired,
 };
 
 export default SessionsList;

@@ -5,16 +5,20 @@ import { BaselineContext } from '../contexts/BaselineContext.jsx';
 import { FramesProvider } from '../contexts/FramesContext.jsx';
 import TimeReadout from './TimeReadout.jsx';
 import FramesList from './FramesList.jsx';
-import { BaselineIcon, NotBaselineIcon, DeleteIcon } from './Icons.jsx';
+import { BaselineIcon, NotBaselineIcon, ChartedIcon, NotChartedIcon, DeleteIcon } from './Icons.jsx';
 
 function SessionsListItem(props) {
   const [isDeleting, setIsDeleting] = useState(false);
   const baseline = useContext(BaselineContext);
-  const { id, createdAt, description, notes, frameTime, gameThreadTime, renderThreadTime, gpuFrameTime, isBaseline, onSetBaselineSessionId } = props;
+  const { id, createdAt, description, notes, frameTime, gameThreadTime, renderThreadTime, gpuFrameTime, isBaseline, isCharted, onBaselineSessionIdChange, onChartSessionIdChange } = props;
   const showBaseline = !isBaseline && baseline.hasBaseline;
   function handleToggleBaselineClick(event) {
     event.preventDefault();
-    onSetBaselineSessionId(isBaseline ? null : id);
+    onBaselineSessionIdChange(isBaseline ? null : id);
+  }
+  function handleToggleChartedClick(event) {
+    event.preventDefault();
+    onChartSessionIdChange(isCharted ? null : id);
   }
   function handleDeleteClick(event) {
     event.preventDefault();
@@ -24,9 +28,14 @@ function SessionsListItem(props) {
   return (
     <div className="session">
       <div className={`session-header card${isBaseline ? ' is-baseline' : ''}`}>
-        <div className="session-baseline-button">
+        <div className={`button${!isBaseline ? ' off' : ''}`}>
           <a href="#" onClick={handleToggleBaselineClick}>
             { isBaseline ? <BaselineIcon size={20} /> : <NotBaselineIcon size={20} /> }
+          </a>
+        </div>
+        <div className={`button${!isBaseline && !isCharted ? ' off' : ''}`}>
+          <a href="#" onClick={handleToggleChartedClick}>
+            { isCharted ? <ChartedIcon size={20} /> : <NotChartedIcon size={20} /> }
           </a>
         </div>
         <div className="session-label">
@@ -66,7 +75,7 @@ function SessionsListItem(props) {
           />
         </div>
         <div style={{ flexGrow: 1 }}></div>
-        <div className="session-delete-button">
+        <div className="button session-delete-button">
           { !isBaseline && (
             <a href="#" onClick={handleDeleteClick}>
               <DeleteIcon />
@@ -92,7 +101,9 @@ SessionsListItem.propTypes = {
   renderThreadTime: PropTypes.number.isRequired,
   gpuFrameTime: PropTypes.number.isRequired,
   isBaseline: PropTypes.bool.isRequired,
-  onSetBaselineSessionId: PropTypes.func.isRequired,
+  isCharted: PropTypes.bool.isRequired,
+  onBaselineSessionIdChange: PropTypes.func.isRequired,
+  onChartSessionIdChange: PropTypes.func.isRequired,
 };
 
 export default SessionsListItem;

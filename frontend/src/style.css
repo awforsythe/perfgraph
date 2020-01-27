@@ -7,32 +7,6 @@ body {
 
 svg {
   fill: #8e9297;
-  font-size: 4em;
-}
-
-a.button {
-  display: inline-block;
-  padding: 0.2em 0.5em;
-  border: 1px solid #000;
-  border-radius: 0.3em;
-  box-sizing: border-box;
-  text-decoration: none;
-  color: #8e9297;
-  font-size: 0.9em;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-align: center;
-  transition: all 0.1s;
-  background-color: #2f3136;
-}
-
-a.button:hover {
-  background-color: #34373c;
-  color: #c6c8cb;
-}
-
-a.button:active {
-  background-color: #393c43;
 }
 
 .tooltip {
@@ -82,6 +56,85 @@ a.button:active {
   background-color: #2f3136;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0.2em;
+  margin-left: 0.5em;
+}
+
+.button {
+  display: flex;
+  background-color: #34373c;
+  border: 1px solid #393c43;
+  border-radius: 4px;
+  box-shadow: 1px 1px 0px 0 #1b1d20;
+}
+
+.button.off {
+  border-color: #2b2e32;
+  background-color: #202225;
+}
+
+.button > a {
+  display: inline-block;
+  color: #8e9297;
+  text-decoration: none;
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+.button:hover {
+  background-color: #393c43;
+}
+
+.button:active {
+  background-color: #2f3136;
+}
+
+.button:hover > a {
+  color: #c6c8cb;
+}
+
+.button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.button-leftcap, .button-nocap {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.button-rightcap, .button-nocap {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.chart-mode-selector {
+  display: flex;
+  margin-right: 1.2em;
+}
+
+.chart-mode-button {
+  background-color: #202225;
+  height: 20px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.chart-mode-button.active {
+  background-color: #33363c;
+}
+
+.chart-mode-button.active > a {
+  color: #c6c8cb;
+}
+
 .session {
   display: flex;
   flex-direction: column;
@@ -93,27 +146,6 @@ a.button:active {
   align-items: center;
   color: #ffffff;
   padding: 0.3em;
-}
-
-.session-baseline-button, .session-delete-button {
-  display: flex;
-  background-color: #34373c;
-  border: 1px solid #393c43;
-  border-radius: 4px;
-  box-shadow: 1px 1px 0px 0 #1b1d20;
-}
-
-.session-baseline-button:hover, .session-delete-button:hover {
-  background-color: #393c43;
-}
-
-.session-baseline-button:active, .session-delete-button:active {
-  background-color: #2f3136;
-}
-
-.session-baseline-button svg, .session-delete-button svg {
-  width: 20px;
-  height: 20x;
 }
 
 .session-delete-button:hover {
