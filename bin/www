@@ -3,6 +3,7 @@
 const db = require('../db');
 const { app, server } = require('../app');
 const debug = require('debug')('perfgraph:server');
+const open = require('open');
 
 function normalizePort(val) {
   const port = parseInt(val, 10);
@@ -35,6 +36,9 @@ function onListening(addr) {
     console.log(`Listening on port${addr}`);
   } else {
     console.log(`Running at http://localhost:${addr.port}`);
+    if (process.argv0.endsWith('perfgraph.exe')) {
+      open(`http://localhost:${addr.port}`);
+    }
   }
 }
 

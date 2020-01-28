@@ -6,6 +6,15 @@
   "scripts": {
     "start": "nodemon ./bin/www"
   },
+  "bin": "./bin/www",
+  "pkg": {
+    "assets": [
+      "public/*"
+    ],
+    "targets": [
+      "node10-win-x64"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -17,6 +26,7 @@
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
     "morgan": "^1.9.1",
+    "open": "^7.0.0",
     "sqlite-async": "^1.0.12"
   }
 }

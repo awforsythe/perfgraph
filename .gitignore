@@ -3,3 +3,4 @@ node_modules/
 perfgraph.db
 cpp/*/Binaries/
 cpp/*/Intermediate/
+dist/

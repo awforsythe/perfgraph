@@ -1,10 +1,19 @@
+const os = require('os');
+const path = require('path');
 const sqlite = require('sqlite-async');
 
 let db = null;
 
+function getDatabaseFilePath() {
+  if (process.argv0.endsWith('perfgraph.exe')) {
+    return path.join(os.homedir(), 'perfgraph.db');
+  }
+  return 'perfgraph.db';
+}
+
 module.exports = {
   init: async () => {
-    db = await sqlite.open('perfgraph.db');
+    db = await sqlite.open(getDatabaseFilePath());
     await db.run(`
       PRAGMA foreign_keys = ON
     `);
