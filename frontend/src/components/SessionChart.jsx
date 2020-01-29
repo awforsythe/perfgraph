@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { ResponsiveContainer, LineChart, CartesianGrid, Legend, XAxis, YAxis, Line } from 'recharts'
+import { ResponsiveContainer, LineChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine, Line } from 'recharts'
 
 import { BaselineContext } from '../contexts/BaselineContext.jsx';
 import { FramesContext } from '../contexts/FramesContext.jsx';
@@ -84,6 +84,9 @@ function formatFrameData(frame, mode) {
   for (const key in schema[mode]) {
     data[key] = frame[schema[mode][key].property] / schema[mode][key].scale;
   }
+  if (mode !== 'time') {
+    data.overlay = frame.gpu_frame_time;
+  }
   return data;
 };
 
@@ -130,6 +133,7 @@ function getLines(mode, showBaseline) {
         <Line
           key={`${mode}.${key}.baseline`}
           name={`${schema[mode][key].name} (base)`}
+          yAxisId="left"
           isAnimationActive={false}
           legendType="none"
           type="monotoneX"
@@ -147,6 +151,7 @@ function getLines(mode, showBaseline) {
       <Line
         key={`${mode}.${key}`}
         name={schema[mode][key].name}
+        yAxisId="left"
         isAnimationActive={false}
         legendType="square"
         type="monotoneX"
@@ -165,14 +170,34 @@ function SessionChart(props) {
   const baseline = useContext(BaselineContext);
   const frames = useContext(FramesContext).frames;
   const { mode } = props;
-  const { data, showBaseline } = formatData(frames, baseline.hasBaseline ? baseline.frames : [], mode);
+  const { data, overlayData, showBaseline } = formatData(frames, baseline.hasBaseline ? baseline.frames : [], mode);
   return (
     <ResponsiveContainer width="100%" height={500}>
       <LineChart data={data} margin={{ top: 0, right: 20, bottom: 5, left: 0 }}>
         <CartesianGrid stroke="#45474d" />
         <Legend verticalAlign="top" height={20} />
         <XAxis dataKey="name" tickLine={false} />
-        <YAxis width={32} allowDecimals={false} type="number" domain={getDomain(mode)} />
+        <YAxis yAxisId="left" width={32} allowDecimals={false} type="number" domain={getDomain(mode)} />
+        {mode !== 'time' && (
+          <YAxis yAxisId="right" width={32} allowDecimals={false} orientation="right" type="number" domain={getDomain('time')} />
+        )}
+        {mode !== 'time' && (
+          <ReferenceLine y={13.3333} stroke="#695558" strokeWidth={1} yAxisId="right" />
+        )}
+        {mode !== 'time' && (
+          <Line
+            name="GPU time (ms)"
+            legendType="square"
+            yAxisId="right"
+            isAnimationActive={false}
+            type="monotoneX"
+            dot={false}
+            dataKey="overlay"
+            stroke="#6e4143"
+            fill="#6e4143"
+            strokeWidth={2}
+          />
+        )}
         {getLines(mode, showBaseline)}
       </LineChart>
     </ResponsiveContainer>
