@@ -1,6 +1,6 @@
 #include "PerfgraphFrameStats.h"
 
-#include "JsonObject.h"
+#include "Dom/JsonObject.h"
 
 TSharedPtr<FJsonObject> FPerfgraphFrameStats::ToJsonFrame(int32 Number, const FString& Description) const
 {

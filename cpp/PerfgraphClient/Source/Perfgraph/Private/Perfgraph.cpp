@@ -3,9 +3,9 @@
 
 #include "Misc/CommandLine.h"
 #include "Http.h"
-#include "JsonObject.h"
-#include "JsonReader.h"
-#include "JsonSerializer.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 #include "Log.h"
 #include "PerfgraphFrameStats.h"
